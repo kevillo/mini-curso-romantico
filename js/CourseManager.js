@@ -6,6 +6,8 @@ class CourseManager {
         this.videos = [];
         this.currentIndex = 0;
         this.videoPlayer = null;
+        this.supportedFormats = ['mp4', 'webm', 'ogg', 'mkv', 'avi', 'mov', 'wmv', 'flv'];
+        this.browserCompatibleFormats = ['mp4', 'webm', 'ogg'];
         
         // Elementos del DOM
         this.elements = {
@@ -19,7 +21,9 @@ class CourseManager {
             nextBtn: document.getElementById(config.nextBtnId),
             progressFill: document.getElementById(config.progressFillId),
             videoInput: document.getElementById(config.videoInputId),
-            currentVideo: document.getElementById(config.currentVideoId)
+            currentVideo: document.getElementById(config.currentVideoId),
+            uploadNote: document.getElementById('uploadNote'),
+            compatibilityNote: document.getElementById('compatibilityNote')
         };
         
         this.init();
@@ -31,6 +35,31 @@ class CourseManager {
     init() {
         this.videoPlayer = new VideoPlayer(this.elements.currentVideo);
         this.setupEventListeners();
+        this.checkBrowserSupport();
+    }
+
+    /**
+     * Verifica el soporte del navegador para formatos de video
+     */
+    checkBrowserSupport() {
+        const video = document.createElement('video');
+        const supportInfo = [];
+        
+        if (video.canPlayType('video/mp4').replace(/no/, '')) {
+            supportInfo.push('MP4');
+        }
+        if (video.canPlayType('video/webm').replace(/no/, '')) {
+            supportInfo.push('WebM');
+        }
+        if (video.canPlayType('video/ogg').replace(/no/, '')) {
+            supportInfo.push('Ogg');
+        }
+        
+        // Nota sobre MKV
+        if (this.elements.uploadNote) {
+            this.elements.uploadNote.textContent = `Tu navegador soporta nativamente: ${supportInfo.join(', ')}. ` +
+                `Los archivos MKV pueden funcionar en algunos navegadores modernos.`;
+        }
     }
 
     /**
@@ -46,6 +75,24 @@ class CourseManager {
     }
 
     /**
+     * Obtiene la extensión del archivo
+     * @param {string} filename - Nombre del archivo
+     * @returns {string} Extensión del archivo
+     */
+    getFileExtension(filename) {
+        return filename.split('.').pop().toLowerCase();
+    }
+
+    /**
+     * Verifica si el formato es compatible
+     * @param {string} extension - Extensión del archivo
+     * @returns {boolean} Si es compatible o no
+     */
+    isFormatSupported(extension) {
+        return this.supportedFormats.includes(extension);
+    }
+
+    /**
      * Maneja la carga de archivos
      * @param {Event} event - Evento de cambio del input
      */
@@ -54,14 +101,58 @@ class CourseManager {
         
         if (files.length === 0) return;
         
-        this.videos = files.map((file, index) => ({
+        let incompatibleFiles = [];
+        let warningFiles = [];
+        
+        this.videos = files.filter(file => {
+            const extension = this.getFileExtension(file.name);
+            
+            if (!this.isFormatSupported(extension)) {
+                incompatibleFiles.push(file.name);
+                return false;
+            }
+            
+            if (!this.browserCompatibleFormats.includes(extension)) {
+                warningFiles.push(file.name);
+            }
+            
+            return true;
+        }).map((file, index) => ({
             file: file,
             url: URL.createObjectURL(file),
             title: `Momento ${index + 1}`,
-            name: file.name
+            name: file.name,
+            extension: this.getFileExtension(file.name)
         }));
         
-        this.startCourse();
+        // Mostrar advertencias
+        if (incompatibleFiles.length > 0) {
+            alert(`Los siguientes archivos no son compatibles y fueron omitidos:\n${incompatibleFiles.join('\n')}`);
+        }
+        
+        if (warningFiles.length > 0) {
+            this.showCompatibilityWarning(warningFiles);
+        }
+        
+        if (this.videos.length > 0) {
+            this.startCourse();
+        } else {
+            alert('No se seleccionaron archivos de video válidos.');
+        }
+    }
+
+    /**
+     * Muestra una advertencia de compatibilidad
+     * @param {Array} files - Archivos con posibles problemas de compatibilidad
+     */
+    showCompatibilityWarning(files) {
+        if (this.elements.compatibilityNote) {
+            this.elements.compatibilityNote.innerHTML = `
+                <strong>Nota:</strong> Los siguientes archivos podrían no reproducirse correctamente en todos los navegadores: 
+                ${files.join(', ')}. Se recomienda usar Chrome o Edge para mejor compatibilidad con MKV.
+            `;
+            this.elements.compatibilityNote.classList.add('show');
+        }
     }
 
     /**
@@ -90,6 +181,12 @@ class CourseManager {
         
         // Actualizar UI
         this.updateUI();
+        
+        // Manejar errores de carga
+        this.elements.currentVideo.onerror = () => {
+            alert(`No se pudo cargar el video: ${video.name}. ` +
+                  `Intenta con un formato diferente o usa Chrome/Edge para archivos MKV.`);
+        };
     }
 
     /**

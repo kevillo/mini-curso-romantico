@@ -15,14 +15,15 @@
         <div class="upload-section" id="uploadSection">
             <h3>Sube los videos de nuestros momentos</h3>
             <div class="file-input-wrapper">
-                <input type="file" id="videoInput" multiple accept="video/*">
+                <input type="file" id="videoInput" multiple accept="video/*,.mkv,.mp4,.avi,.mov,.wmv,.flv,.webm">
                 <label for="videoInput" class="file-input-label">
                     Seleccionar Videos
                 </label>
             </div>
             <p class="upload-hint">
-                Puedes seleccionar varios videos a la vez
+                Formatos soportados: MP4, MKV, AVI, MOV, WMV, FLV, WebM
             </p>
+            <p class="upload-note" id="uploadNote"></p>
         </div>
 
         <!-- Contenedor de videos -->
@@ -52,6 +53,9 @@
                     </button>
                 </div>
             </div>
+            
+            <!-- Indicador de compatibilidad -->
+            <div class="compatibility-note" id="compatibilityNote"></div>
         </div>
 
         <!-- Mensaje final -->

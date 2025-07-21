@@ -109,6 +109,13 @@ h1 {
     font-size: 0.9em;
 }
 
+.upload-note {
+    margin-top: 10px;
+    color: #8a2be2;
+    font-size: 0.85em;
+    font-style: italic;
+}
+
 /* Videos Container */
 .videos-container {
     display: none;
@@ -187,6 +194,22 @@ video {
     background: linear-gradient(90deg, #8a2be2 0%, #d63384 100%);
     width: 0%;
     transition: width 0.5s ease;
+}
+
+/* Compatibility Note */
+.compatibility-note {
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    background: #fff3cd;
+    color: #856404;
+    border-radius: 10px;
+    font-size: 0.85em;
+    display: none;
+}
+
+.compatibility-note.show {
+    display: block;
 }
 
 /* Final Message */
