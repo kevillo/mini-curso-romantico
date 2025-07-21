@@ -353,11 +353,32 @@ video {
 
 .signature-section {
     display: inline-block;
+    position: relative;
+}
+
+.signature-container {
+    position: relative;
+    height: 80px;
+    margin-bottom: -20px;
+}
+
+.signature-handwritten {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5em;
+    color: #2c3e50;
+    margin: 0;
+    transform: rotate(-3deg);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .signature-line {
     color: #333;
     margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .signature-name {
@@ -422,6 +443,7 @@ video {
     .certificate-title { font-size: 1.8em; }
     .recipient-name { font-size: 2em; }
     .certificate-text { font-size: 1.1em; }
+    .signature-handwritten { font-size: 2.5em; }
     .certificate-seal {
         width: 80px;
         height: 80px;
