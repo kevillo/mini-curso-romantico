@@ -72,11 +72,72 @@
                 Eres el amor de mi vida y siempre lo serás.
             </p>
             <div class="heart-animation">💑</div>
+            
+            <!-- Botón para mostrar certificado -->
+            <button class="nav-btn show-certificate-btn" onclick="courseManager.showCertificate()">
+                Ver tu Certificado de Amor 💝
+            </button>
+        </div>
+        
+        <!-- Certificado -->
+        <div class="certificate-container" id="certificateContainer">
+            <div class="certificate" id="certificate">
+                <div class="certificate-border">
+                    <div class="certificate-content">
+                        <div class="certificate-header">
+                            <div class="heart-decoration">🌹</div>
+                            <h1 class="certificate-title">Certificado de Amor Eterno</h1>
+                            <div class="heart-decoration">🌹</div>
+                        </div>
+                        
+                        <div class="certificate-body">
+                            <p class="certificate-intro">Por medio del presente se certifica que:</p>
+                            
+                            <h2 class="recipient-name">Leticia Díaz</h2>
+                            
+                            <p class="certificate-text">
+                                Ha completado exitosamente el curso "Nuestro Viaje Juntos"
+                                demostrando ser la persona más especial, amorosa y maravillosa
+                                en la vida del que suscribe.
+                            </p>
+                            
+                            <p class="certificate-declaration">
+                                Se le otorga este certificado como testimonio de un amor
+                                que trasciende el tiempo y el espacio, prometiendo que
+                                cada día será una nueva oportunidad para amarte más.
+                            </p>
+                            
+                            <div class="certificate-footer">
+                                <div class="signature-section">
+                                    <p class="signature-line">_________________________</p>
+                                    <p class="signature-name">Con todo mi amor</p>
+                                    <p class="signature-date" id="certificateDate"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="certificate-seal">
+                                <span class="seal-emoji">💕</span>
+                                <p class="seal-text">Amor<br>Eterno</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="certificate-actions">
+                <button class="nav-btn" onclick="courseManager.downloadCertificate()">
+                    Descargar Certificado 💾
+                </button>
+                <button class="nav-btn" onclick="courseManager.hideCertificate()">
+                    Volver ←
+                </button>
+            </div>
         </div>
     </div>
 
     <script src="js/VideoPlayer.js"></script>
     <script src="js/CourseManager.js"></script>
     <script src="js/app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>

@@ -23,7 +23,9 @@ class CourseManager {
             videoInput: document.getElementById(config.videoInputId),
             currentVideo: document.getElementById(config.currentVideoId),
             uploadNote: document.getElementById('uploadNote'),
-            compatibilityNote: document.getElementById('compatibilityNote')
+            compatibilityNote: document.getElementById('compatibilityNote'),
+            certificateContainer: document.getElementById('certificateContainer'),
+            certificateDate: document.getElementById('certificateDate')
         };
         
         this.init();
@@ -36,6 +38,18 @@ class CourseManager {
         this.videoPlayer = new VideoPlayer(this.elements.currentVideo);
         this.setupEventListeners();
         this.checkBrowserSupport();
+        this.setCurrentDate();
+    }
+
+    /**
+     * Establece la fecha actual en el certificado
+     */
+    setCurrentDate() {
+        if (this.elements.certificateDate) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date().toLocaleDateString('es-ES', options);
+            this.elements.certificateDate.textContent = today;
+        }
     }
 
     /**
@@ -244,6 +258,50 @@ class CourseManager {
     finishCourse() {
         this.showSection('final');
         this.videoPlayer.stop();
+    }
+
+    /**
+     * Muestra el certificado
+     */
+    showCertificate() {
+        if (this.elements.certificateContainer) {
+            this.elements.certificateContainer.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    /**
+     * Oculta el certificado
+     */
+    hideCertificate() {
+        if (this.elements.certificateContainer) {
+            this.elements.certificateContainer.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    /**
+     * Descarga el certificado como imagen
+     */
+    async downloadCertificate() {
+        try {
+            const certificate = document.getElementById('certificate');
+            
+            // Usar html2canvas para capturar el certificado
+            const canvas = await html2canvas(certificate, {
+                scale: 2,
+                backgroundColor: '#ffffff'
+            });
+            
+            // Convertir a imagen y descargar
+            const link = document.createElement('a');
+            link.download = 'Certificado_de_Amor_Leticia_Diaz.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        } catch (error) {
+            console.error('Error al descargar el certificado:', error);
+            alert('Hubo un error al descargar el certificado. Por favor, toma una captura de pantalla.');
+        }
     }
 
     /**
